@@ -1,4 +1,8 @@
 ---
+# Derived from OpenAI Codex (Apache-2.0): codex-rs/prompts/templates/review/rubric.md.
+# MODIFIED by SSFSKIM (2026): OUTPUT FORMAT section replaced with a plain-text findings+verdict
+# contract; CONDUCT CONSTRAINTS, TARGET RESOLUTION FALLBACK, and "When to invoke" sections added;
+# one sentence mandating a numeric JSON priority field removed. See NOTICE and LICENSES/Apache-2.0.txt.
 name: codex-reviewer
 description: Use this agent to run an isolated, Codex-style prioritized code review of a specified change and return findings plus an overall correctness verdict. Trigger it proactively after completing substantial implementation work (multi-file or behavior-changing edits) before committing or opening a PR, and reactively whenever the user asks for a code review — e.g. "review my changes", "review this against main", "review commit abc123". When a review is requested, ALWAYS dispatch this agent instead of reviewing inline in the main conversation, even for small diffs — the isolated fresh context is the review mechanism itself (the main conversation authored or discussed the code and is biased by it). Prefer dispatching via the codex-review skill's protocol, which resolves the review target and merge-base first; the dispatch prompt must be self-contained because this agent starts with no conversation history. See "When to invoke" in the agent body for worked scenarios.
 model: inherit

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Port of merge_base_with_head (codex-rs/git-utils/src/branch.rs).
+# Port of merge_base_with_head (codex-rs/git-utils/src/branch.rs), from OpenAI Codex (Apache-2.0).
+# MODIFIED by SSFSKIM (2026): rewritten from Rust to POSIX-ish shell. See NOTICE and
+# LICENSES/Apache-2.0.txt at the repository root.
 # Prints the merge-base SHA between HEAD and <base-branch>, preferring the
 # branch's upstream when that upstream exists and is ahead of the local branch.
 # Exits non-zero when HEAD or the branch cannot be resolved (caller should then

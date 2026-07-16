@@ -1,4 +1,9 @@
 ---
+# Contains material derived from OpenAI Codex (Apache-2.0): the seed-prompt templates and
+# user-facing hints from codex-rs/prompts/src/review_request.rs.
+# MODIFIED by SSFSKIM (2026): templates embedded in a Claude Code dispatch protocol; the
+# base-branch backup template hardened against ref-name shell injection (deviates from the
+# upstream text). See NOTICE and LICENSES/Apache-2.0.txt.
 name: codex-review
 description: This skill should be used when the user asks for a "codex review" or "codex-style review", asks to "review my changes", "review uncommitted changes", "review against main" or another base branch, "review this branch", "review commit <sha>", "run a code review", or when substantial implementation work has just been completed and a pre-commit review is warranted. Provides the Codex-parity dispatch protocol for the codex-reviewer agent - review-target selection (uncommitted, base branch, commit, custom), merge-base precomputation, verbatim seed-prompt templates, and the verdict relay format.
 ---

@@ -13,6 +13,9 @@ repository at LICENSES/Apache-2.0.txt. Specifically:
 - skills/codex-review/scripts/resolve_target.sh is a shell port of
   merge_base_with_head in codex-rs/git-utils/src/branch.rs.
 
+Each of the files listed above carries a per-file modification notice as
+required by Apache-2.0 §4(b).
+
 Upstream NOTICE attribution, reproduced as required by Apache-2.0 §4(d):
 
     OpenAI Codex
