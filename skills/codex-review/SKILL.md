@@ -1,6 +1,6 @@
 ---
 name: codex-review
-description: This skill should be used when the user asks to "review my changes", "review uncommitted changes", "review against main" or another base branch, "review this branch", "review commit <sha>", "run a code review", or when substantial implementation work has just been completed and a pre-commit review is warranted. Provides the Codex-parity dispatch protocol for the codex-reviewer agent - review-target selection (uncommitted, base branch, commit, custom), merge-base precomputation, verbatim seed-prompt templates, and the verdict relay format.
+description: This skill should be used when the user asks for a "codex review" or "codex-style review", asks to "review my changes", "review uncommitted changes", "review against main" or another base branch, "review this branch", "review commit <sha>", "run a code review", or when substantial implementation work has just been completed and a pre-commit review is warranted. Provides the Codex-parity dispatch protocol for the codex-reviewer agent - review-target selection (uncommitted, base branch, commit, custom), merge-base precomputation, verbatim seed-prompt templates, and the verdict relay format.
 ---
 
 # Codex-style code review dispatch
