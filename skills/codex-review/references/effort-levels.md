@@ -33,14 +33,20 @@ Each finder dispatch carries exactly one of these texts verbatim as its LENS ASS
 
 Sweep assignment text (replaces the LENS ASSIGNMENT block in the sweep dispatch):
 
-    SWEEP ASSIGNMENT: A first review wave already ran. The verified findings so far
-    are listed below. Hunt ONLY defect classes and locations that no listed finding
-    covers — gaps between lenses: interactions of two changes, ordering and staleness
-    across hunks, asymmetric setup/teardown, defaults evaluated once, moved code that
-    lost an anchor. Do not re-derive or restate any listed finding.
+    SWEEP ASSIGNMENT: A first review wave already ran. The findings it produced and
+    the candidates it already rejected are listed below. Hunt ONLY defect classes and
+    locations that neither list covers — gaps between lenses: interactions of two
+    changes, ordering and staleness across hunks, asymmetric setup/teardown, defaults
+    evaluated once, moved code that lost an anchor. Do not re-derive or restate a
+    surviving finding. Do not re-raise a rejected candidate on the same reasoning it
+    was rejected for — only if you have genuinely new evidence that defeats that
+    rejection, and then say what the new evidence is.
 
-    Verified findings so far:
+    Surviving findings:
     <the surviving findings, title + location lines only>
+
+    Already rejected (do not re-raise without new evidence):
+    <each refuted candidate, title + the one-line reason it was refuted>
 
 ## Dispatch mechanics
 
@@ -57,7 +63,7 @@ Verifier prompt = concatenate: the same resolved target seed; "Posture: <neutral
 
 ## Grouping (after all finders of the wave return)
 
-Merge every candidate from every finder into one list. Group candidates that cite the same file AND overlapping or adjacent line ranges (within about 10 lines) — different lenses often surface the same defect. Dispatch ONE verifier per group, carrying every candidate in the group; the verifier judges each candidate separately, and duplicates collapse when it confirms one formulation and refutes the rest as duplicates of it. Candidates in different files, or far apart in one file, get separate verifiers.
+Merge every candidate from every finder into one list. Group candidates that cite the same file AND whose line ranges overlap after widening each range by 2 lines on each side — different lenses often surface the same defect with slightly different anchors. Do NOT chain nearby-but-non-overlapping ranges into one group: in a small file that collapses distinct defects into a single verifier, which is exactly the independence the topology exists to protect. Dispatch ONE verifier per group, carrying every candidate in the group; the verifier judges each candidate separately and marks same-defect duplicates explicitly (`duplicate of "<primary title>"`), putting the full evidence on the strongest formulation. At synthesis, keep only each defect's primary formulation — a duplicate marking on a candidate is a dedup instruction, never a refutation of the defect. Candidates in different files, or at non-overlapping ranges in one file, get separate verifiers.
 
 ## Synthesis (mechanical; no judgment)
 
