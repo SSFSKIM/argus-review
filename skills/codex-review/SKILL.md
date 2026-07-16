@@ -23,7 +23,7 @@ Map the request to exactly one of four targets (they are mutually exclusive):
 
 ## Step 2 — Resolve the target
 
-- **base branch**: run `"${CLAUDE_PLUGIN_ROOT}/skills/codex-review/scripts/resolve_target.sh" <branch>` from the repository being reviewed. It prints the merge-base SHA (preferring the branch's upstream when the upstream is ahead — the same rule as Codex's `merge_base_with_head`). If it fails, use the backup template in Step 3 instead.
+- **base branch**: run `"${CLAUDE_PLUGIN_ROOT}/skills/codex-review/scripts/resolve_target.sh" '<branch>'` from the repository being reviewed — substitute the branch name inside the single quotes and keep them (git permits ref names containing `$(...)`, backticks, and `;`; the quotes stop the shell from interpreting them). It prints the merge-base SHA (preferring the branch's upstream when the upstream is ahead — the same rule as Codex's `merge_base_with_head`). If it fails, use the backup template in Step 3 instead.
 - **commit**: optionally resolve the commit title for a nicer prompt: `git log -1 --format=%s <sha>`.
 - **uncommitted / custom**: nothing to resolve.
 - A base-branch or commit review reads committed history; warn the user if the worktree is dirty in a way that could confuse the comparison they asked for (e.g. asking for a base-branch review while the actual work is still uncommitted).
