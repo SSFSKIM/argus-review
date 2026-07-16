@@ -21,6 +21,8 @@ Map the request to exactly one of four targets (they are mutually exclusive):
 - **commit** — "review commit <sha>", "review the last commit" (resolve with `git rev-parse HEAD`).
 - **custom** — any bespoke review instructions that do not fit the above; pass them through verbatim.
 
+This skill assumes a POSIX shell (bash/zsh) for `resolve_target.sh` and the quoting rules below. On a Windows session without Git Bash, skip the script and use the base-branch backup template in Step 3 (the reviewer resolves the merge base itself with git), and pass any branch name to the reviewer as plain prose rather than as a shell-quoted argument.
+
 ## Step 2 — Resolve the target
 
 - **base branch**: run `"${CLAUDE_PLUGIN_ROOT}/skills/codex-review/scripts/resolve_target.sh" '<branch>'` from the repository being reviewed — substitute the branch name inside the single quotes, and if the name itself contains a single quote, replace each `'` with `'\''` first (the standard POSIX idiom; with it, single-quoting is safe for every character git allows in a ref, including `$(...)`, backticks, `;`, and quotes). It prints the merge-base SHA (preferring the branch's upstream when the upstream is ahead — the same rule as Codex's `merge_base_with_head`). If it fails, use the backup template in Step 3 instead.
