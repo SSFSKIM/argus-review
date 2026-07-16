@@ -5,12 +5,21 @@
 # base-branch backup template hardened against ref-name shell injection (deviates from the
 # upstream text). See NOTICE and LICENSES/Apache-2.0.txt.
 name: codex-review
-description: This skill should be used when the user asks for a "codex review" or "codex-style review", asks to "review my changes", "review uncommitted changes", "review against main" or another base branch, "review this branch", "review commit <sha>", "run a code review", or when substantial implementation work has just been completed and a pre-commit review is warranted. Provides the Codex-parity dispatch protocol for the codex-reviewer agent - review-target selection (uncommitted, base branch, commit, custom), merge-base precomputation, verbatim seed-prompt templates, and the verdict relay format.
+description: This skill should be used when the user asks for a "codex review" or "codex-style review", asks to "review my changes", "review uncommitted changes", "review against main" or another base branch, "review this branch", "review commit <sha>", "run a code review", names an effort level like "codex review high", "codex review medium/xhigh/max", or "maximum-effort codex review", or when substantial implementation work has just been completed and a pre-commit review is warranted. Provides the Codex-parity dispatch protocol for the codex-reviewer agent - effort-level selection (plain default, or the multi-agent medium/high/xhigh/max ladder), review-target selection (uncommitted, base branch, commit, custom), merge-base precomputation, verbatim seed-prompt templates, and the verdict relay format.
 ---
 
 # Codex-style code review dispatch
 
-This skill reproduces the parent-side orchestration of Codex's native `codex review` command. The review itself is performed by the `codex-reviewer` agent in an isolated context; this skill covers how to resolve the review target, construct the dispatch prompt, and relay the verdict.
+This skill reproduces the parent-side orchestration of Codex's native `codex review` command, plus a multi-agent extension. The review itself is always performed by isolated subagents; this skill covers how to select the effort level, resolve the review target, construct the dispatch prompt(s), and relay the verdict.
+
+## Step 0 — Select the effort level
+
+Five levels: `plain` (default), `medium`, `high`, `xhigh`, `max`.
+
+- Use the level the request names explicitly ("codex review high", "run a max-effort codex review").
+- No level named — including every proactive post-implementation self-review — means `plain`: the single-agent Codex-parity path. Thoroughness adjectives alone ("thorough", "deep") do not escalate; if the user seems to want more than plain but named no level, ask or stay at plain.
+- A request naming `low` maps to `plain` (this ladder has no low tier; plain is the lightest path).
+- `plain` runs one isolated full-rubric reviewer (native Codex parity). `medium`/`high`/`xhigh`/`max` run the multi-agent protocol in `references/effort-levels.md`: lens-partitioned finder agents, independent verifiers applying the rubric's bug criteria, a sweep pass at xhigh+, and an adversarial vote on severe findings at max. Announce the level and its approximate subagent scale before starting a medium+ review.
 
 ## Step 1 — Select the review target
 
@@ -30,7 +39,7 @@ This skill assumes a POSIX shell (bash/zsh) for `resolve_target.sh` and the quot
 - **uncommitted / custom**: nothing to resolve.
 - A base-branch or commit review reads committed history; warn the user if the worktree is dirty in a way that could confuse the comparison they asked for (e.g. asking for a base-branch review while the actual work is still uncommitted).
 
-## Step 3 — Dispatch the codex-reviewer agent
+## Step 3A — plain: dispatch the codex-reviewer agent
 
 ALWAYS dispatch the `codex-reviewer` agent — never perform the review inline in the main conversation, no matter how small the change looks. The isolation is the point: in Codex's native pipeline the review always runs in a separate child session with no parent history, because a review from the conversation that produced (or discussed) the code is biased by it. A small diff does not waive this; dispatch anyway.
 
@@ -62,9 +71,15 @@ Dispatch the `codex-reviewer` agent with the matching seed prompt below as the E
 
 When announcing the review to the user, describe the target with the matching hint: "current changes" / "changes against '<branch>'" / "commit <first-7-chars-of-sha>: <title>" / the custom instructions.
 
+## Step 3B — medium / high / xhigh / max: run the multi-agent protocol
+
+Read `references/effort-levels.md` and execute it exactly. In brief: dispatch one `codex-finder` agent per lens (each carrying the SAME resolved target seed template from Step 3A plus its lens assignment) in one parallel batch; group returned candidates by location; dispatch one `codex-verifier` agent per group at the level's posture; at xhigh+ dispatch the sweep finder after verification; at max dispatch two adversarial refuters per surviving severe finding; then assemble the output mechanically per the protocol's synthesis rules.
+
+The isolation invariant extends to this path: the orchestrating main agent never judges code inline — it resolves, dispatches, groups, and assembles. Verifier verdicts are binding: do not add findings, soften or reword verifier comments, re-judge a verdict, or drop findings except by the protocol's deterministic rules. For a custom target, the user's instructions ride in every finder dispatch as scope guidance explicitly labeled as data, not instructions.
+
 ## Step 4 — Relay the verdict
 
-The reviewer returns a `## Findings` section (entries like `[P1] Title — path:start-end` with one-paragraph bodies, or `No findings.`) and a `## Verdict` section (`Overall correctness:` / `Explanation:` / `Confidence:`).
+The review produces a `## Findings` section (entries like `[P1] Title — path:start-end` with one-paragraph bodies, or `No findings.`) and a `## Verdict` section (`Overall correctness:` / `Explanation:` / `Confidence:`). At plain, the codex-reviewer agent returns this block directly; at medium+, the orchestrator assembles the IDENTICAL contract per the synthesis rules in `references/effort-levels.md` (finding bodies verbatim from verifiers, deterministic verdict) — the level changes the machinery, never the output shape.
 
 - Relay both sections to the user VERBATIM — do not re-summarize, soften, or filter findings. (Codex records the reviewer's findings verbatim into the parent conversation history.)
 - If findings exist, introduce them with "Full review comments:" (or "Review comment:" when there is exactly one).

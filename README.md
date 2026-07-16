@@ -43,6 +43,14 @@ The four review targets, mirroring `codex review`'s CLI modes:
 
 The reviewer also triggers proactively: after the main agent completes substantial multi-file or behavior-changing work, it may dispatch a review before committing.
 
+### Effort levels (v0.2.0)
+
+Every target accepts an effort level: `plain` (default) · `medium` · `high` · `xhigh` · `max`. Say it with the request — "codex review **high** against main", "run a **max**-effort codex review of my changes". Unnamed = `plain`, always.
+
+`plain` is the native-parity path above: one isolated full-rubric reviewer. The higher levels multi-agentify it: lens-partitioned **finder** subagents hunt candidates in parallel with a recall bias (medium: 3 lenses — changed-logic, cross-file contracts, removed behavior; high+: 5, adding security and performance), independent **verifier** subagents judge every candidate against the Codex rubric's eight bug criteria (CONFIRMED / PLAUSIBLE / REFUTED, with quoted evidence), `xhigh` adds a **sweep** finder that hunts only the gaps the first wave left, and `max` requires every severe finding to survive two **adversarial refuters** (unanimity to kill). The output contract is identical at every level; only the machinery scales. Cost scales too — medium ≈ 4–7 subagents, high ≈ 6–12; the agent announces the scale before starting. Full protocol: [`skills/codex-review/references/effort-levels.md`](skills/codex-review/references/effort-levels.md).
+
+Why not just run N copies of the plain reviewer? Because the rubric's precision instruction ("prefer outputting no findings") makes every copy self-censor the *same* borderline candidates — the misses are correlated, and a union of censored sets is still censored. The multi-agent levels instead move that precision gate out of the finders and into independent verification and synthesis, which is where it can't suppress recall.
+
 ## How it maps to native Codex
 
 Every element of this plugin is a port of a specific mechanism in the Codex Rust codebase — the rubric system prompt, the verbatim seed-prompt templates, the parent-side merge-base precomputation (`git merge-base HEAD <branch-or-its-ahead-upstream>`), the isolated child session, the tool restrictions, and the verdict handoff. The full mechanism map, the deliberate deviations (hybrid text output instead of the rubric's JSON, justified by what native actually renders), and re-sync instructions live in [`skills/codex-review/references/codex-parity.md`](skills/codex-review/references/codex-parity.md).
@@ -50,11 +58,14 @@ Every element of this plugin is a port of a specific mechanism in the Codex Rust
 ## Layout
 
     .claude-plugin/plugin.json           manifest (+ marketplace.json)
-    agents/codex-reviewer.md             the isolated reviewer (Codex rubric port)
+    agents/codex-reviewer.md             the isolated reviewer (Codex rubric port; the plain level)
+    agents/codex-finder.md               lens-partitioned candidate finder (medium+)
+    agents/codex-verifier.md             independent rubric-standard verifier (medium+)
     skills/codex-review/SKILL.md         parent-side dispatch protocol
     skills/codex-review/scripts/resolve_target.sh    merge-base resolution (merge_base_with_head port)
     skills/codex-review/references/codex-parity.md   mechanism map + deviations + re-sync guide
+    skills/codex-review/references/effort-levels.md  multi-agent orchestration protocol (medium+)
 
 ## License
 
-MIT for this plugin's original content (see `LICENSE`). The review rubric in `agents/codex-reviewer.md`, the seed-prompt templates in `skills/codex-review/SKILL.md`, and `resolve_target.sh` derive from OpenAI's Codex CLI and remain under Apache-2.0 — the full license text is vendored at `LICENSES/Apache-2.0.txt` and the required attribution is in `NOTICE`.
+MIT for this plugin's original content (see `LICENSE`). The review rubric in `agents/codex-reviewer.md`, the rubric criteria vendored in `agents/codex-verifier.md`, the seed-prompt templates in `skills/codex-review/SKILL.md`, and `resolve_target.sh` derive from OpenAI's Codex CLI and remain under Apache-2.0 — the full license text is vendored at `LICENSES/Apache-2.0.txt` and the required attribution is in `NOTICE`.

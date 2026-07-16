@@ -1,7 +1,7 @@
 {
   "name": "codex-review",
-  "version": "0.1.0",
-  "description": "OpenAI Codex's native review workflow (codex review / codex exec review) replicated as a Claude Code plugin: an isolated reviewer subagent carrying the Codex review rubric, four review targets with merge-base parity, and a findings + verdict handoff.",
+  "version": "0.2.0",
+  "description": "OpenAI Codex's native review workflow (codex review / codex exec review) replicated as a Claude Code plugin: an isolated reviewer subagent carrying the Codex review rubric, four review targets with merge-base parity, and a findings + verdict handoff. v0.2.0 adds multi-agent effort levels (plain|medium|high|xhigh|max): lens-partitioned finders, rubric-standard verifiers, a sweep pass, and adversarial voting.",
   "author": { "name": "SSFSKIM" },
   "license": "MIT AND Apache-2.0"
 }
