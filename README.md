@@ -57,4 +57,4 @@ Every element of this plugin is a port of a specific mechanism in the Codex Rust
 
 ## License
 
-MIT. The review rubric text is derived from OpenAI's Codex CLI (Apache-2.0), `codex-rs/prompts/templates/review/rubric.md`.
+MIT for this plugin's original content (see `LICENSE`). The review rubric in `agents/codex-reviewer.md`, the seed-prompt templates in `skills/codex-review/SKILL.md`, and `resolve_target.sh` derive from OpenAI's Codex CLI and remain under Apache-2.0 — the full license text is vendored at `LICENSES/Apache-2.0.txt` and the required attribution is in `NOTICE`.

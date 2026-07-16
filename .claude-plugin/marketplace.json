@@ -1,5 +1,6 @@
 {
   "name": "codex-review",
+  "description": "OpenAI Codex's native review workflow replicated for Claude Code: isolated reviewer subagent, four review targets, findings + verdict handoff.",
   "owner": { "name": "SSFSKIM" },
   "plugins": [
     {
