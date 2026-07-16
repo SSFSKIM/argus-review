@@ -1,0 +1,25 @@
+codex-review (Claude Code plugin)
+Copyright (c) 2026 SSFSKIM
+
+This plugin includes material derived from OpenAI Codex
+(https://github.com/openai/codex), licensed under the Apache License,
+Version 2.0. The full Apache-2.0 license text is included in this
+repository at LICENSES/Apache-2.0.txt. Specifically:
+
+- agents/codex-reviewer.md derives substantially verbatim from
+  codex-rs/prompts/templates/review/rubric.md.
+- The seed-prompt templates in skills/codex-review/SKILL.md derive from
+  codex-rs/prompts/src/review_request.rs.
+- skills/codex-review/scripts/resolve_target.sh is a shell port of
+  merge_base_with_head in codex-rs/git-utils/src/branch.rs.
+
+Each of the files listed above carries a per-file modification notice as
+required by Apache-2.0 §4(b).
+
+Upstream NOTICE attribution, reproduced as required by Apache-2.0 §4(d):
+
+    OpenAI Codex
+    Copyright 2025 OpenAI
+
+All other original content in this repository is licensed under the MIT
+License (see LICENSE).
