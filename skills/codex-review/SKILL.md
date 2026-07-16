@@ -25,6 +25,8 @@ Map the request to exactly one of four targets (they are mutually exclusive):
 
 ## Step 3 — Dispatch the codex-reviewer agent
 
+ALWAYS dispatch the `codex-reviewer` agent — never perform the review inline in the main conversation, no matter how small the change looks. The isolation is the point: in Codex's native pipeline the review always runs in a separate child session with no parent history, because a review from the conversation that produced (or discussed) the code is biased by it. A small diff does not waive this; dispatch anyway.
+
 Dispatch the `codex-reviewer` agent with the matching seed prompt below as the ENTIRE task prompt. Substitute the `{{placeholders}}`; do not add conversation context, summaries of the work, or expectations about what the review should find — the reviewer is deliberately isolated and unbiased, exactly like Codex's review child session which starts with no parent history. (Exception: the custom target passes the user's instructions verbatim, and those may say anything.)
 
 - uncommitted:
