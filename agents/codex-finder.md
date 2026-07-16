@@ -41,5 +41,5 @@ Your final message MUST match this shape exactly — plain text, no code fences:
       Evidence: <what you read that makes this real; quote the key line(s); cite files and functions>
 
 - One entry per candidate, ordered most severe first. The [P0]-[P3] tag is your provisional severity guess: [P0] drop-everything, [P1] urgent, [P2] normal, [P3] low.
-- Line ranges must overlap the reviewed change (or the site provably affected by it) and be as short as possible for interpreting the issue (avoid ranges over 5-10 lines).
+- The cited line range MUST overlap the reviewed change (a line the diff added or modified) and be as short as possible for interpreting the issue (avoid ranges over 5-10 lines). This holds even when the failure ultimately manifests elsewhere: anchor on the changed line that introduces the defect, and name the downstream or cross-file site that is provably affected in the Failure scenario and Evidence. A finding whose anchor falls outside the diff cannot be shown as an inline review comment, so it is not permitted — the affected external site is described, not used as the anchor.
 - If you found no qualifying candidates, the section must contain exactly: No candidates. Do not invent candidates to fill the result.
