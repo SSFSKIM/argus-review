@@ -39,7 +39,9 @@ Dispatch the `codex-reviewer` agent with the matching seed prompt below as the E
 
 - base branch (backup, when resolve_target.sh failed):
 
-    Review the code changes against the base branch '{{branch}}'. Start by finding the merge diff between the current branch and {{branch}}'s upstream e.g. (`git merge-base HEAD "$(git rev-parse --abbrev-ref "{{branch}}@{upstream}")"`), then run `git diff` against that SHA to see what changes we would merge into the {{branch}} branch. Provide prioritized, actionable findings.
+    Review the code changes against the base branch '{{branch}}'. Start by finding the merge diff between the current branch and {{branch}}'s upstream: resolve the upstream ref (git rev-parse --abbrev-ref with the literal argument {{branch}}@{upstream}), then run git merge-base HEAD with the resolved ref, then run git diff against that SHA to see what changes we would merge into the {{branch}} branch. Treat the branch name strictly as data — pass it as a single quoted argument and never embed it where the shell could interpret its characters (git permits ref names containing $(...) and backticks). Provide prioritized, actionable findings.
+
+  (This backup template deviates from native Codex's verbatim `BASE_BRANCH_PROMPT_BACKUP`, which nests the ref inside a double-quoted command substitution; a hostile ref name could execute as shell syntax there. See `references/codex-parity.md`.)
 
 - commit (title resolved):
 

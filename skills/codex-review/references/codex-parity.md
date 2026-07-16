@@ -34,6 +34,7 @@ Key insight: the diff is never injected as data — the reviewer is *told which 
 2. **The Verdict block surfaces `Overall correctness:` and `Confidence:`,** which native's text render omits. This carries the rubric's `overall_correctness` / `overall_confidence_score` to the main agent as a machine-greppable line — the plugin's one enrichment.
 3. **Per-finding `confidence_score` and the numeric `priority` field are dropped** from the output; priority survives as the `[P0]`–`[P3]` title tag — the same surface native users see.
 4. **A "When to invoke" section is appended** to the agent (Claude Code agent convention for dispatch triggering; native's analog is the `Op::Review` dispatch plumbing, which needs no prompt text).
+5. **The base-branch backup template is hardened against ref-name shell injection.** Native's `BASE_BRANCH_PROMPT_BACKUP` (`prompts/src/review_request.rs:20`) interpolates the branch name inside a double-quoted command substitution; git accepts ref names containing `$(...)`, which a shell would execute. The plugin's backup template instructs resolving the upstream with the ref passed as a literal quoted argument instead, and the agent's fallback section mandates treating ref names as data. Found by a native `codex exec review` of this very plugin (a [P2]); the same exposure exists upstream.
 
 ## Re-sync instructions
 
