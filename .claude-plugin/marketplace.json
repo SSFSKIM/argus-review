@@ -1,0 +1,11 @@
+{
+  "name": "codex-review",
+  "owner": { "name": "SSFSKIM" },
+  "plugins": [
+    {
+      "name": "codex-review",
+      "source": "./",
+      "description": "Codex-style isolated code review: reviewer subagent + dispatch skill."
+    }
+  ]
+}
