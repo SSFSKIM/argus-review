@@ -8,6 +8,8 @@ repository at LICENSES/Apache-2.0.txt. Specifically:
 
 - agents/codex-reviewer.md derives substantially verbatim from
   codex-rs/prompts/templates/review/rubric.md.
+- agents/codex-verifier.md vendors the bug criteria and comment
+  guidelines from codex-rs/prompts/templates/review/rubric.md.
 - The seed-prompt templates in skills/codex-review/SKILL.md derive from
   codex-rs/prompts/src/review_request.rs.
 - skills/codex-review/scripts/resolve_target.sh is a shell port of
