@@ -8,6 +8,17 @@ Argus's single-reviewer core (the `plain` level) adapts the review mechanism of 
 
 Key insight: the diff is never injected as data — the reviewer is *told which git commands to run* and gathers context itself. And the output schema is enforced only by the prompt (`final_output_json_schema: None` in native), parsed tolerantly afterward.
 
+## The second native path: detached review (deliberately not ported)
+
+The mechanism above is the **inline** path — CLI `codex review` / `codex exec review`, TUI `/review`, and app-server `review/start` with `delivery: inline`. Native ships a second path: **detached** review (`app-server/src/request_processors/turn_processor.rs`, `start_detached_review`), the Codex app's background-review delivery. It is a general subagent turn, not a purpose-built review session:
+
+- The prompt is `"Use [$review-agent](<path>) for this review.\n\n<target prompt>"` — the compressed `review-agent` sample skill stands in for the full rubric, and there is no parent-side merge-base precompute (the skill text carries the self-resolution steps instead).
+- The config is a plain clone with only the model overridden — **none of the inline path's feature stripping**, so web search and collab/multi-agent tooling remain whatever the session has. A detached reviewer in the app can spawn exploration subagents; the only conduct constraint is the skill text itself ("do not … delegate the review to another agent"), prompt-enforced rather than runtime-enforced.
+- `AgentRunner::start` → `ThreadManager::spawn_subagent` forks the **parent thread's full history** into the child (`core/src/thread_manager.rs`), so the detached reviewer is not context-isolated — it reviews while carrying the conversation that authored the code.
+- Upstream treats the path as unfinished: paginated threads are rejected "until detached review has a bounded fork path", and `spawn_subagent` carries a merge-with-`fork_agent` TODO.
+
+`plain` ports the inline path by intent: of the two, it is the one that carries the properties this plugin treats as the review mechanism itself — fresh-context isolation, the full rubric as the reviewer's system prompt, and enforced tool restriction. The multi-agent capability the detached path retains is served here by the effort levels instead (deviation 8), which keep isolation intact — every finder and verifier starts with a fresh context — rather than trading it away. This is also why the `argus-reviewer` agent's tool list excludes agent-dispatch: in Claude Code a spawned subagent would not inherit the reviewer's restrictions, so granting dispatch would reduce the read-only/no-web guarantee to prompt-only enforcement, exactly the detached path's weakness.
+
 ## Element-by-element map
 
 | Native element (codex-rs path) | Plugin counterpart | Fidelity |
@@ -50,3 +61,4 @@ When upstream Codex changes, re-check these files and fold differences into the 
 - `codex-rs/git-utils/src/branch.rs` (`merge_base_with_head`, `resolve_upstream_if_remote_ahead`) → `scripts/resolve_target.sh`.
 - `codex-rs/core/src/tasks/review.rs` + `core/src/session/review.rs` → agent frontmatter restrictions and CONDUCT CONSTRAINTS.
 - `codex-rs/skills/src/assets/samples/review-agent/SKILL.md` → compare adaptation choices.
+- `codex-rs/app-server/src/request_processors/turn_processor.rs` (`start_detached_review`) → confirm the detached path still differs as described (skill-based, multi-agent left enabled, parent history forked); it remains intentionally not ported.
