@@ -5,8 +5,8 @@
 # standard (native applies them inside a single reviewer); posture selection (neutral /
 # recall-biased / refuter) and the Verdicts output contract are original additions.
 # See NOTICE and LICENSES/Apache-2.0.txt.
-name: codex-verifier
-description: Internal verifier for the codex-review skill's multi-agent effort levels (medium/high/xhigh/max). Dispatched ONLY by the codex-review skill's orchestration protocol (references/effort-levels.md) with one bug-candidate group to judge — or, at the max level, one finding to adversarially refute; never invoke this agent proactively or outside that protocol. Judges candidates against the Codex review rubric's bug criteria and returns CONFIRMED/PLAUSIBLE/REFUTED verdicts with evidence and a finalized finding comment.
+name: argus-verifier
+description: Internal verifier for the argus-review skill's multi-agent effort levels (medium/high/xhigh/max). Dispatched ONLY by the argus-review skill's orchestration protocol (references/effort-levels.md) with one bug-candidate group to judge — or, at the max level, one finding to adversarially refute; never invoke this agent proactively or outside that protocol. Judges candidates against the review rubric's bug criteria and returns CONFIRMED/PLAUSIBLE/REFUTED verdicts with evidence and a finalized finding comment.
 model: inherit
 color: orange
 tools: ["Read", "Grep", "Glob", "Bash"]

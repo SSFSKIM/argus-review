@@ -1,7 +1,7 @@
 {
-  "name": "codex-review",
-  "version": "0.2.0",
-  "description": "OpenAI Codex's native review workflow (codex review / codex exec review) replicated as a Claude Code plugin: an isolated reviewer subagent carrying the Codex review rubric, four review targets with merge-base parity, and a findings + verdict handoff. v0.2.0 adds multi-agent effort levels (plain|medium|high|xhigh|max): lens-partitioned finders, rubric-standard verifiers, a sweep pass, and adversarial voting.",
+  "name": "argus-review",
+  "version": "0.3.0",
+  "description": "Argus — multi-agent code review with effort levels for Claude Code. One isolated reviewer by default (plain); scale to a hundred-eyed panel (medium|high|xhigh|max): lens-partitioned finders, independent verifiers judging every candidate against a strict eight-criterion bug standard, a gap-sweep pass, and adversarial voting. Four review targets with merge-base resolution; every review ends in a decisive findings + verdict block.",
   "author": { "name": "SSFSKIM" },
   "license": "MIT AND Apache-2.0"
 }

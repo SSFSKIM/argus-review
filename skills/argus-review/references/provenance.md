@@ -1,6 +1,6 @@
-# Parity map: this plugin ↔ Codex's native review
+# Provenance: the upstream method the plain level derives from
 
-This document maps every part of the `codex-review` plugin to the mechanism it replicates in OpenAI's Codex CLI (the Rust codebase, `codex-rs/`). Use it to audit fidelity and to re-sync the plugin when upstream Codex changes.
+Argus's single-reviewer core (the `plain` level) adapts the review mechanism of OpenAI's Codex CLI (the Rust codebase, `codex-rs/`), which is Apache-2.0 licensed — `NOTICE` carries the required attribution. This document is the ledger of that derivation: it maps each borrowed element to its upstream source, records the deliberate deviations, and carries the re-sync guide for upstream changes. It is a license-compliance and maintenance reference, not user-facing branding; the multi-agent effort levels (deviation 8) are original to this plugin.
 
 ## The native mechanism in brief
 
@@ -12,7 +12,7 @@ Key insight: the diff is never injected as data — the reviewer is *told which 
 
 | Native element (codex-rs path) | Plugin counterpart | Fidelity |
 |---|---|---|
-| Review rubric system prompt — `prompts/templates/review/rubric.md`, installed via `base_instructions` (`core/src/tasks/review.rs:118`) | `agents/codex-reviewer.md` body | Verbatim except output-format section (see Deviations) |
+| Review rubric system prompt — `prompts/templates/review/rubric.md`, installed via `base_instructions` (`core/src/tasks/review.rs:118`) | `agents/argus-reviewer.md` body | Verbatim except output-format section (see Deviations) |
 | Isolated child session, `initial_history: None` (`core/src/codex_delegate.rs` via `tasks/review.rs:126-137`) | Claude Code subagent — always starts with a fresh context | Exact |
 | Seed prompt templates — `prompts/src/review_request.rs:18-32` (`UNCOMMITTED_PROMPT`, `BASE_BRANCH_PROMPT`, `BASE_BRANCH_PROMPT_BACKUP`, `COMMIT_PROMPT[_WITH_TITLE]`) | `SKILL.md` Step 3, verbatim | Exact |
 | Parent-side merge-base precompute — `merge_base_with_head` (`git-utils/src/branch.rs:15`): prefer branch upstream when it exists and is ahead, else local branch; `git merge-base HEAD <ref>` | `scripts/resolve_target.sh` | Exact port |
@@ -45,7 +45,7 @@ Key insight: the diff is never injected as data — the reviewer is *told which 
 
 When upstream Codex changes, re-check these files and fold differences into the plugin:
 
-- `codex-rs/prompts/templates/review/rubric.md` → `agents/codex-reviewer.md` body (everything above OUTPUT FORMAT should stay verbatim).
+- `codex-rs/prompts/templates/review/rubric.md` → `agents/argus-reviewer.md` body (everything above OUTPUT FORMAT should stay verbatim).
 - `codex-rs/prompts/src/review_request.rs` → `SKILL.md` Step 3 templates and announcement hints.
 - `codex-rs/git-utils/src/branch.rs` (`merge_base_with_head`, `resolve_upstream_if_remote_ahead`) → `scripts/resolve_target.sh`.
 - `codex-rs/core/src/tasks/review.rs` + `core/src/session/review.rs` → agent frontmatter restrictions and CONDUCT CONSTRAINTS.
