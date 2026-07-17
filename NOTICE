@@ -1,4 +1,4 @@
-codex-review (Claude Code plugin)
+argus-review (Claude Code plugin)
 Copyright (c) 2026 SSFSKIM
 
 This plugin includes material derived from OpenAI Codex
@@ -6,13 +6,13 @@ This plugin includes material derived from OpenAI Codex
 Version 2.0. The full Apache-2.0 license text is included in this
 repository at LICENSES/Apache-2.0.txt. Specifically:
 
-- agents/codex-reviewer.md derives substantially verbatim from
+- agents/argus-reviewer.md derives substantially verbatim from
   codex-rs/prompts/templates/review/rubric.md.
-- agents/codex-verifier.md vendors the bug criteria and comment
+- agents/argus-verifier.md vendors the bug criteria and comment
   guidelines from codex-rs/prompts/templates/review/rubric.md.
-- The seed-prompt templates in skills/codex-review/SKILL.md derive from
+- The seed-prompt templates in skills/argus-review/SKILL.md derive from
   codex-rs/prompts/src/review_request.rs.
-- skills/codex-review/scripts/resolve_target.sh is a shell port of
+- skills/argus-review/scripts/resolve_target.sh is a shell port of
   merge_base_with_head in codex-rs/git-utils/src/branch.rs.
 
 Each of the files listed above carries a per-file modification notice as

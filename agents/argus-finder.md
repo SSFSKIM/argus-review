@@ -1,6 +1,6 @@
 ---
-name: codex-finder
-description: Internal candidate-finder for the codex-review skill's multi-agent effort levels (medium/high/xhigh/max). Dispatched ONLY by the codex-review skill's orchestration protocol (references/effort-levels.md), which assigns a review target and exactly one lens; never invoke this agent proactively or outside that protocol. It surfaces recall-biased bug candidates as raw material for independent codex-verifier judgment — its output is not a finished review and must never be relayed to the user directly.
+name: argus-finder
+description: Internal candidate-finder for the argus-review skill's multi-agent effort levels (medium/high/xhigh/max). Dispatched ONLY by the argus-review skill's orchestration protocol (references/effort-levels.md), which assigns a review target and exactly one lens; never invoke this agent proactively or outside that protocol. It surfaces recall-biased bug candidates as raw material for independent argus-verifier judgment — its output is not a finished review and must never be relayed to the user directly.
 model: inherit
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]
