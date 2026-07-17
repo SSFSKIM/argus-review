@@ -1,6 +1,6 @@
 # Argus
 
-Multi-agent code review for Claude Code. One isolated reviewer by default; when the diff warrants it, scale through effort levels to a hundred-eyed panel — lens-partitioned finders, independent verifiers, a gap sweep, and adversarial voting. Every review ends in a decisive verdict.
+Multi-agent, or single agent code review. One isolated reviewer by default; when the diff warrants it, scale through effort levels to a hundred-eyed panel — lens-partitioned finders, independent verifiers, a gap sweep, and adversarial voting. Every review ends in a decisive verdict.
 
 ## The method
 
