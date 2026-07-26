@@ -1,6 +1,6 @@
 {
   "name": "argus-review",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Argus — multi-agent code review with effort levels for Claude Code. One isolated reviewer by default (plain); scale to a hundred-eyed panel (medium|high|xhigh|max): lens-partitioned finders, independent verifiers judging every candidate against a strict eight-criterion bug standard, a gap-sweep pass, and adversarial voting. Four review targets with merge-base resolution; every review ends in a decisive findings + verdict block.",
   "author": { "name": "SSFSKIM" },
   "license": "MIT AND Apache-2.0"
